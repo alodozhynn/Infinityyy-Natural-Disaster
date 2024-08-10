@@ -1,0 +1,91 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "Infinity Natural Disaster ░", HidePremium = false, SaveConfig = true, ConfigFolder = "NDSHub"})
+
+local Tab = Window:MakeTab({
+	Name = "LocalPlayer",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+OrionLib:MakeNotification({
+	Name = "Infinityyy.nd was loaded !",
+	Content = "Made by Alodozhynn, with OpenAI (ChatGPT)",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+local savedPosition
+
+Tab:AddButton({
+	Name = "Voltar pro lobby (morte falsa)",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+      		local character = player.Character or player.CharacterAdded:Wait()
+      		character:SetPrimaryPartCFrame(CFrame.new(-282, 180, 342))
+      		print("Teleported to lobby")
+  	end    
+})
+
+Tab:AddToggle({
+	Name = "Auto-Heal",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			local player = game.Players.LocalPlayer
+			local character = player.Character or player.CharacterAdded:Wait()
+
+			-- Salvar a posição atual
+			savedPosition = character.PrimaryPart.Position
+
+			OrionLib:MakeNotification({
+				Name = "Auto-Heal Ativado",
+				Content = "Salvando posição e reiniciando...",
+				Image = "rbxassetid://4483345998",
+				Time = 5
+			})
+
+			-- Resetar o jogador
+			character:BreakJoints()
+
+			-- Esperar o jogador renascer e teleportá-lo de volta
+			player.CharacterAdded:Wait()
+			player.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(savedPosition)
+
+			OrionLib:MakeNotification({
+				Name = "Tentando carregar...",
+				Content = "Carregando comandos, por favor aguarde...",
+				Image = "rbxassetid://4483345998",
+				Time = 5
+			})
+		else
+			OrionLib:MakeNotification({
+				Name = "Auto-Heal Desativado",
+				Content = "Auto-Heal foi desligado.",
+				Image = "rbxassetid://4483345998",
+				Time = 5
+			})
+		end
+	end    
+})
+
+Tab:AddSlider({
+	Name = "Speed Boost",
+	Min = 16,
+	Max = 100,
+	Default = 16,
+	Color = Color3.fromRGB(0,255,0),
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(Value)
+		local player = game.Players.LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		if humanoid then
+			humanoid.WalkSpeed = Value
+		end
+	end    
+})
+
+Tab:AddLabel("Survive the disasters and be the last one standing!")
+
+OrionLib:Init()
